@@ -625,6 +625,7 @@ module YARD
         alias compile_error on_parse_error
 
         def comment_starts_line?(charno)
+          return true if @source[charno] == "\n"
           (charno - 1).downto(0) do |i|
             ch = @source[i]
             break if ch == "\n"
