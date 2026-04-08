@@ -662,6 +662,30 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
         '<pre class="code foo"><code class="foo">x = 1</code></pre>'
       )
     end
+
+    it "does not re-escape already-highlighted code blocks embedded via {yard:include_tags}" do
+      # parse_codeblocks double-processing: when {yard:include_tags} embeds already-highlighted
+      # <pre class="example code"><code>HIGHLIGHTED</code></pre> blocks into a page, a second
+      # call to parse_codeblocks must not HTML-escape the span tags.
+      # Regression test for https://github.com/lsegal/yard/issues/1661
+      highlighted = "<span class='kw'>def</span> <span class='id identifier rubyid_foo'>foo</span>"
+      html = %(<pre class="example code"><code>#{highlighted}</code></pre>)
+      result = subject.htmlify(html, :html)
+      expect(result).not_to include('&lt;span')
+      expect(result).to include("<span class='kw'>def</span>")
+    end
+
+    it "does not re-escape already-highlighted code with leading whitespace (indented blocks)" do
+      # The rescue check in html_syntax_highlight_ruby_ripper was anchored with ^<span, which
+      # only matches when spans start at the beginning of a line. Leading spaces (e.g., from
+      # indented Ruby code like '  def foo') caused the check to fail and h(source) to be called.
+      # Regression test for https://github.com/lsegal/yard/issues/1661
+      highlighted = "  <span class='kw'>def</span> <span class='id identifier rubyid_foo'>foo</span>"
+      html = %(<pre class="example code"><code>#{highlighted}</code></pre>)
+      result = subject.htmlify(html, :html)
+      expect(result).not_to include('&lt;span')
+      expect(result).to include("<span class='kw'>def</span>")
+    end
   end
 
   describe "#link_url" do

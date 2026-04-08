@@ -650,7 +650,12 @@ module YARD
           language ||= detect_lang_in_codeblock_attributes($1, $2)
           language ||= object.source_type
 
-          if options.highlight
+          # Skip re-highlighting if the block is already highlighted (e.g. from a recursive
+          # htmlify call via {include:} or {yard:include_tags}). Passing pre-highlighted HTML
+          # through CGI.unescapeHTML would corrupt deliberately-escaped entities inside spans.
+          # Note: this heuristic suppresses highlighting for code blocks in :html markup that
+          # contain a literal <span> tag in the source being documented (an uncommon edge case).
+          if options.highlight && string !~ HtmlSyntaxHighlightHelper::ALREADY_HIGHLIGHTED_RE
             string = html_syntax_highlight(CGI.unescapeHTML(string), language)
           end
           classes = ['code', language].compact.join(' ')
