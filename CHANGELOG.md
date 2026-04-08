@@ -1,5 +1,16 @@
 # main
 
+# [0.9.39] - April 8th, 2026
+
+[0.9.39]: https://github.com/lsegal/yard/compare/v0.9.38...v0.9.39
+
+- Add support for Ruby 4.0 (#1663)
+- Add changelog URI to gemspec metadata (#1641)
+- Fix issues with source ranges (#1642)
+- Fix an issue loading relative links from file list in HTML template (#1660)
+- Various test fixes (#1650, #1651)
+
+
 # [0.9.38] - December 5th, 2025
 
 [0.9.38]: https://github.com/lsegal/yard/compare/v0.9.37...v0.9.38
