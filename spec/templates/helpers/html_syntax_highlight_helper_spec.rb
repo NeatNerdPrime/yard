@@ -52,6 +52,21 @@ RSpec.describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
       expect(html_syntax_highlight("$ git clone http://url")).to eq "$ git clone http://url"
     end if HAVE_RIPPER
 
+    it "returns already-highlighted source unchanged when ripper fails (no leading whitespace)" do
+      allow(self).to receive(:options).and_return(Options.new.update(:highlight => true))
+      highlighted = "<span class='kw'>def</span> <span class='id identifier rubyid_foo'>foo</span>"
+      expect(html_syntax_highlight(highlighted)).to eq highlighted
+    end if HAVE_RIPPER
+
+    it "returns already-highlighted source unchanged when ripper fails (with leading whitespace)" do
+      # Regression: the old rescue check /^<span\s+class=/ was anchored at start-of-line and
+      # failed to match when the source began with whitespace (e.g. indented def), causing
+      # h(source) to be called and span tags to be HTML-escaped into visible literal text.
+      allow(self).to receive(:options).and_return(Options.new.update(:highlight => true))
+      highlighted = "  <span class='kw'>def</span> <span class='id identifier rubyid_foo'>foo</span>"
+      expect(html_syntax_highlight(highlighted)).to eq highlighted
+    end if HAVE_RIPPER
+
     it "links constants/methods" do
       other = CodeObjects::NamespaceObject.new(:root, :Other)
       allow(self).to receive(:options).and_return(Options.new.update(:highlight => true))

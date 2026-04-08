@@ -673,7 +673,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       result = subject.htmlify(html, :html)
       expect(result).not_to include('&lt;span')
       expect(result).to include("<span class='kw'>def</span>")
-    end if HAVE_RIPPER
+    end
 
     it "does not re-escape already-highlighted code with leading whitespace (indented blocks)" do
       # The rescue check in html_syntax_highlight_ruby_ripper was anchored with ^<span, which
@@ -685,7 +685,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       result = subject.htmlify(html, :html)
       expect(result).not_to include('&lt;span')
       expect(result).to include("<span class='kw'>def</span>")
-    end if HAVE_RIPPER
+    end
   end
 
   describe "#link_url" do
