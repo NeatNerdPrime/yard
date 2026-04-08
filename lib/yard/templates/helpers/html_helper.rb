@@ -650,7 +650,7 @@ module YARD
           language ||= detect_lang_in_codeblock_attributes($1, $2)
           language ||= object.source_type
 
-          if options.highlight
+          if options.highlight && string !~ /<span[\s>]/
             string = html_syntax_highlight(CGI.unescapeHTML(string), language)
           end
           classes = ['code', language].compact.join(' ')
