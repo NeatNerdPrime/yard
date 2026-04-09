@@ -614,7 +614,7 @@ for aliases is not supported, however.
 
 The new `yard server` command spawns a documentation server that can serve
 either documentation for a local project or installed RubyGems. The server
-will host (by default) on https://localhost:8808.
+will host (by default) on http://localhost:8808.
 
 To serve documentation for the active project (in the current directory):
 
