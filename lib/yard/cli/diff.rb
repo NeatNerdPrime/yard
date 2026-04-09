@@ -2,6 +2,7 @@
 require 'tmpdir'
 require 'fileutils'
 require 'open-uri'
+require 'open3'
 
 module YARD
   module CLI
@@ -108,7 +109,8 @@ module YARD
         FileUtils.mkdir_p(tmpdir)
         FileUtils.cp_r('.', tmpdir)
         Dir.chdir(tmpdir)
-        log.info("git says: " + `git reset --hard #{commit}`.chomp)
+        out, = Open3.capture2e('git', 'reset', '--hard', commit)
+        log.info("git says: " + out.chomp)
         generate_yardoc(tmpdir)
       ensure
         Dir.chdir(@old_path)
