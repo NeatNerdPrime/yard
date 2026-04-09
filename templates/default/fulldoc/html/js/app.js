@@ -383,7 +383,7 @@ window.addEventListener(
 
       document.getElementById("class_list_link").classList = classListLink;
 
-      const url = new URL(e.data.url, "https://localhost");
+      const url = new URL(e.data.url, "http://localhost");
       const hash = decodeURIComponent(url.hash ?? "");
       if (hash) {
         document.getElementById(hash.substring(1)).scrollIntoView();

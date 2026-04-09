@@ -308,7 +308,7 @@ module YARD
             @heredoc_tokens << [token, data, [lineno, charno]]
 
             # fix ripper encoding of heredoc bug
-            # (see http://bugs.ruby-lang.org/issues/6200)
+            # (see https://bugs.ruby-lang.org/issues/6200)
             data.force_encoding(file_encoding) if file_encoding
 
             @heredoc_state = :ended if token == :heredoc_end

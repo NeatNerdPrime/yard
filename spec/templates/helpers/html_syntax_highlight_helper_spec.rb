@@ -49,7 +49,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlSyntaxHighlightHelper do
 
     it "returns escaped unhighlighted source if a syntax error is found (ripper)" do
       allow(self).to receive(:options).and_return(Options.new.update(:highlight => true))
-      expect(html_syntax_highlight("$ git clone http://url")).to eq "$ git clone http://url"
+      expect(html_syntax_highlight("$ git clone https://url")).to eq "$ git clone https://url"
     end if HAVE_RIPPER
 
     it "returns already-highlighted source unchanged when ripper fails (no leading whitespace)" do

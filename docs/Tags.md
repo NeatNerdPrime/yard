@@ -141,7 +141,7 @@ a set of conventions for how to list types is described below.
 
 <p class="note">
   A list of examples of common type listings and what they translate into is
-  available at <a href="http://yardoc.org/types">http://yardoc.org/types</a>.
+  available at <a href="https://yardoc.org/types">https://yardoc.org/types</a>.
 </p>
 
 Typically, a type list contains a list of classes or modules that are associated
@@ -280,4 +280,3 @@ Note that you might not need a tag title if you are hiding it. The title
 part can be omitted.
 
 {yard:include_tags}
-
