@@ -78,7 +78,7 @@ module YARD
 
       def print_start_message(server)
         opts = server.default_options.merge(server.options)
-        log.puts ">> YARD #{YARD::VERSION} documentation server at http://#{opts[:Host]}:#{opts[:Port]}"
+        log.puts ">> YARD #{YARD::VERSION} documentation server at https://#{opts[:Host]}:#{opts[:Port]}"
 
         # Only happens for Mongrel
         return unless server.server.to_s == "Rack::Handler::Mongrel"

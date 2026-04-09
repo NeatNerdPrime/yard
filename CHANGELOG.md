@@ -858,7 +858,7 @@ contributions to this version.
 
 [0.4.0]: https://github.com/lsegal/yard/compare/v0.2.3.5...v0.4.0
 
-- Added new templating engine based on [tadpole](http://github.com/lsegal/tadpole)
+- Added new templating engine based on [tadpole](https://github.com/lsegal/tadpole)
 - Added YARD queries (`--query` CLI argument to yardoc)
 - Greatly expanded YARD documentation
 - Added plugin support

@@ -158,7 +158,7 @@ module YARD
         end
 
         # Remote gemfile from rubygems.org
-        url = "http://rubygems.org/downloads/#{gemfile}"
+        url = "https://rubygems.org/downloads/#{gemfile}"
         log.info "Searching for remote gem file #{url}"
         begin
           # Note: In Ruby 2.4.x, URI.open is a private method. After

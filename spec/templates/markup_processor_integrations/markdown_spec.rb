@@ -60,8 +60,8 @@ MARKDOWN
     end
 
     it "autolinks URLs" do
-      expect(html_renderer.htmlify('http://example.com', :markdown).chomp.gsub('&#47;', '/')).to eq(
-        '<p><a href="http://example.com">http://example.com</a></p>'
+      expect(html_renderer.htmlify('https://example.com', :markdown).chomp.gsub('&#47;', '/')).to eq(
+        '<p><a href="https://example.com">https://example.com</a></p>'
       )
     end
   end

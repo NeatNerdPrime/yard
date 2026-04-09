@@ -1,10 +1,10 @@
 # YARD: Yay! A Ruby Documentation Tool
 
-[![Homepage](https://img.shields.io/badge/home-yardoc.org-blue.svg)](http://yardoc.org)
-[![GitHub](https://img.shields.io/badge/github-lsegal/yard-blue.svg)](http://github.com/lsegal/yard)
-[![Documentation](https://img.shields.io/badge/docs-rdoc.info-blue.svg)](http://rubydoc.org/gems/yard/frames)
+[![Homepage](https://img.shields.io/badge/home-yardoc.org-blue.svg)](https://yardoc.org)
+[![GitHub](https://img.shields.io/badge/github-lsegal/yard-blue.svg)](https://github.com/lsegal/yard)
+[![Documentation](https://img.shields.io/badge/docs-rdoc.info-blue.svg)](https://rubydoc.org/gems/yard/frames)
 
-[![Gem Version](https://badge.fury.io/rb/yard.svg)](http://github.com/lsegal/yard/releases)
+[![Gem Version](https://badge.fury.io/rb/yard.svg)](https://github.com/lsegal/yard/releases)
 [![Unit Tests](https://github.com/lsegal/yard/actions/workflows/ci.yml/badge.svg)](https://github.com/lsegal/yard/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/lsegal/yard/badge.svg)](https://coveralls.io/github/lsegal/yard)
 [![License](https://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
@@ -283,7 +283,7 @@ $ yard server
 
 And the project inside the current directory will be parsed (if the source has
 not yet been scanned by YARD) and served at
-[http://localhost:8808](http://localhost:8808).
+[https://localhost:8808](https://localhost:8808).
 
 #### Live Reloading
 
@@ -307,7 +307,7 @@ the first request of a newly parsed gem.
 ### 5. `yard graph` Graphviz Generator
 
 You can use `yard graph` to generate dot graphs of your code. This, of course,
-requires [Graphviz](http://www.graphviz.org) and the `dot` binary. By default
+requires [Graphviz](https://www.graphviz.org) and the `dot` binary. By default
 this will generate a graph of the classes and modules in the best UML2 notation
 that Graphviz can support, but without any methods listed. With the `--full`
 option, methods and attributes will be listed. There is also a `--dependencies`

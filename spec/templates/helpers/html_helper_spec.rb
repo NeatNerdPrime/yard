@@ -147,11 +147,11 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       log.enter_level(Logger::FATAL) do
         pending 'This test depends on markdown' unless markup_class(:markdown)
       end
-      expect(htmlify('{http://example.com Title}', :markdown).chomp).to match(
-        %r{<p><a href="http://example.com".*>Title</a></p>}
+      expect(htmlify('{https://example.com Title}', :markdown).chomp).to match(
+        %r{<p><a href="https://example.com".*>Title</a></p>}
       )
-      expect(htmlify('{http://example.com}', :markdown).chomp).to match(
-        %r{<p><a href="http://example.com".*>http://example.com</a></p>}
+      expect(htmlify('{https://example.com}', :markdown).chomp).to match(
+        %r{<p><a href="https://example.com".*>https://example.com</a></p>}
       )
     end
 
@@ -401,17 +401,17 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       )
     end
 
-    it "creates regular links with http:// or https:// prefixes" do
-      expect(parse_link(resolve_links("{http://example.com}"))).to eq(
-        :inner_text => "http://example.com",
+    it "creates regular links with https:// or https:// prefixes" do
+      expect(parse_link(resolve_links("{https://example.com}"))).to eq(
+        :inner_text => "https://example.com",
         :target => "_parent",
-        :href => "http://example.com",
-        :title => "http://example.com"
+        :href => "https://example.com",
+        :title => "https://example.com"
       )
-      expect(parse_link(resolve_links("{http://example.com title}"))).to eq(
+      expect(parse_link(resolve_links("{https://example.com title}"))).to eq(
         :inner_text => "title",
         :target => "_parent",
-        :href => "http://example.com",
+        :href => "https://example.com",
         :title => "title"
       )
     end
@@ -458,10 +458,10 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "resolves link with newline in title-part" do
-      expect(parse_link(resolve_links("{http://example.com foo\nbar}"))).to eq(
+      expect(parse_link(resolve_links("{https://example.com foo\nbar}"))).to eq(
         :inner_text => "foo bar",
         :target => "_parent",
-        :href => "http://example.com",
+        :href => "https://example.com",
         :title => "foo bar"
       )
     end
@@ -690,7 +690,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
 
   describe "#link_url" do
     it "adds target if scheme is provided" do
-      expect(link_url("http://url.com")).to include(" target=\"_parent\"")
+      expect(link_url("https://url.com")).to include(" target=\"_parent\"")
       expect(link_url("https://url.com")).to include(" target=\"_parent\"")
       expect(link_url("irc://url.com")).to include(" target=\"_parent\"")
       expect(link_url("../not/scheme")).not_to include("target")

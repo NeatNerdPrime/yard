@@ -171,7 +171,7 @@ only mixins inside of a "Foo::Bar" namespace by doing:
 YARD now ships with the beginnings of internationalization support
 for translating documentation into multiple languages. The
 `yard i18n` command now allows you to generate ".pot" and ultimately
-".po" files for translation with [gettext](http://www.gnu.org/software/gettext).
+".po" files for translation with [gettext](https://www.gnu.org/software/gettext).
 
 Note that this tool is a small step in the larger transition for
 proper I18n support in YARD. We still have to add proper gettext
@@ -283,7 +283,7 @@ above example would be:
 But note that `--query` does not work when YARD is in "safe mode"
 due to security concerns, whereas `--api` works in either mode.
 This enables `--api` to function on remote documentation sites like
-[rubydoc.info](http://rubydoc.info).
+[rubydoc.info](https://rubydoc.info).
 
 ## Added `--non-transitive-tag` to disable transitive tag (0.8.3)
 
@@ -307,7 +307,7 @@ with `yard server -B PORT` or `yard server --bind PORT`.
 
 Support for the AsciiDoc markup type is now introduced using the `asciidoc`
 markup type (`yard doc -m asciidoc`). Requires the
-[asciidoctor](http://rubygems.org/gems/asciidoctor) RubyGem library to be
+[asciidoctor](https://rubygems.org/gems/asciidoctor) RubyGem library to be
 installed before running YARD.
 
 ## Added `yard markups` command to list available markup types (0.8.6)
@@ -614,7 +614,7 @@ for aliases is not supported, however.
 
 The new `yard server` command spawns a documentation server that can serve
 either documentation for a local project or installed RubyGems. The server
-will host (by default) on http://localhost:8808.
+will host (by default) on https://localhost:8808.
 
 To serve documentation for the active project (in the current directory):
 
@@ -645,7 +645,7 @@ templates. To serve documentation for installed gems:
   will do this for you on-the-fly. It is therefore possible to speed up your
   gem installs by using `gem install GEMNAME --no-rdoc` without repercussion.
   You can also add this switch to your `~/.gemrc` file so that you don't need
-   to re-type it each time. See [this link](http://stackoverflow.com/questions/1789376/how-do-i-make-no-ri-no-rdoc-the-default-for-gem-install)
+   to re-type it each time. See [this link](https://stackoverflow.com/questions/1789376/how-do-i-make-no-ri-no-rdoc-the-default-for-gem-install)
    for exact instructions.</span>
 
 ## Groups support for method listing (0.6.0)
@@ -718,7 +718,7 @@ regular diffing tells you which lines have been added/removed in a file,
 object diffing allows you to see what classes/methods/modules have been
 added/removed between versions of a codebase.
 
-For an overview of how to use `yard diff`, see [YARD Object Oriented Diffing](http://gnuu.org/2010/06/26/yard-object-oriented-diffing/).
+For an overview of how to use `yard diff`, see [YARD Object Oriented Diffing](https://gnuu.org/2010/06/26/yard-object-oriented-diffing/).
 
 ## `yard stats` to display statistics and undocumented objects (0.6.0)
 
@@ -902,7 +902,7 @@ Support for documenting native Ruby C code (0.5.0)
 
 It is now possible to document native Ruby extensions with YARD with a new
 C parser mostly borrowed from RDoc. This enables the ability to document
-Ruby's core and stdlibs which will be hosted on http://yardoc.org/docs. In
+Ruby's core and stdlibs which will be hosted on https://yardoc.org/docs. In
 addition, the .yardoc dump for the Ruby-core classes will become available
 as an installable gem for yri support (see #3).
 
@@ -1144,7 +1144,7 @@ Default rake task is now `rake yard`
 Not a big change, but anyone using the default "rake yardoc" task should
 update their scripts:
 
-[http://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0](http://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0)
+[https://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0](https://github.com/lsegal/yard/commit/ad38a68dd73898b06bd5d0a1912b7d815878fae0)
 
 
 What's New in 0.2.3.x?
