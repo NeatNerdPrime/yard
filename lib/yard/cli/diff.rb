@@ -109,8 +109,11 @@ module YARD
         FileUtils.mkdir_p(tmpdir)
         FileUtils.cp_r('.', tmpdir)
         Dir.chdir(tmpdir)
-        out, = Open3.capture2e('git', 'reset', '--hard', commit)
+        out, status = Open3.capture2e('git', 'reset', '--hard', commit)
         log.info("git says: " + out.chomp)
+        unless status.success?
+          raise "git reset --hard #{commit.inspect} failed with exit status #{status.exitstatus}: #{out}"
+        end
         generate_yardoc(tmpdir)
       ensure
         Dir.chdir(@old_path)
