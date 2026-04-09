@@ -401,7 +401,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       )
     end
 
-    it "creates regular links with https:// or https:// prefixes" do
+    it "creates regular links with https:// prefix" do
       expect(parse_link(resolve_links("{https://example.com}"))).to eq(
         :inner_text => "https://example.com",
         :target => "_parent",
@@ -691,7 +691,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
   describe "#link_url" do
     it "adds target if scheme is provided" do
       expect(link_url("https://url.com")).to include(" target=\"_parent\"")
-      expect(link_url("https://url.com")).to include(" target=\"_parent\"")
+      expect(link_url("http://url.com")).to include(" target=\"_parent\"")
       expect(link_url("irc://url.com")).to include(" target=\"_parent\"")
       expect(link_url("../not/scheme")).not_to include("target")
     end
