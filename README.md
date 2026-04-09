@@ -283,7 +283,7 @@ $ yard server
 
 And the project inside the current directory will be parsed (if the source has
 not yet been scanned by YARD) and served at
-[https://localhost:8808](https://localhost:8808).
+[http://localhost:8808](http://localhost:8808).
 
 #### Live Reloading
 
