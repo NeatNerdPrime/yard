@@ -27,7 +27,9 @@ end
 begin
   require 'coveralls'
   Coveralls.wear!
-end if ENV['CI'] && HAVE_RIPPER && RUBY_VERSION >= '2.5.0'
+rescue LoadError
+  log.warn "Coveralls not found, skipping coverage reporting to coveralls.io"
+end if ENV['CI'] && HAVE_RIPPER && RUBY_VERSION >= '2.7.0'
 
 NAMED_OPTIONAL_ARGUMENTS = RUBY_VERSION >= '2.1.0'
 

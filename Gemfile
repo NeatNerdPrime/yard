@@ -6,8 +6,8 @@ group :development do
   gem 'rake'
   gem 'rdoc'
   gem 'json'
-  gem 'simplecov'
-  gem 'coveralls_reborn', :require => false
+  gem 'simplecov' if RUBY_VERSION >= '2.7.'
+  gem 'coveralls_reborn', :require => false if RUBY_VERSION >= '2.7.'
   gem 'webrick'
 end
 
