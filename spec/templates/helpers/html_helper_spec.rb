@@ -118,7 +118,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
     end
 
     it "returns regular text with :text markup" do
-      expect(htmlify("fo\no\n\nbar<>", :text)).to eq "fo<br/>o<br/><br/>bar&lt;&gt;"
+      expect(htmlify("fo\no\n\nbar<>", :text)).to eq "fo<br>o<br><br>bar&lt;&gt;"
     end
 
     it "returns unmodified text with :none markup" do

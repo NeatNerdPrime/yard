@@ -156,7 +156,7 @@ module YARD
       # @return [String] the output HTML
       # @since 0.6.0
       def html_markup_text(text)
-        h(text).gsub(/\r?\n/, '<br/>')
+        h(text).gsub(/\r?\n/, '<br>')
       end
 
       # @return [String] the same text with no markup
