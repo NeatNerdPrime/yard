@@ -2,7 +2,11 @@
 
 # What's New in 0.9.x?
 
-## `#-` comment block separators
+## Support for Ruby Signature Files (.rbs) (0.9.40)
+
+YARD now supports parsing Ruby signature files (.rbs) with full docstring support. This means you can write your documentation in `.rbs` files and have it show up in generated documentation, and use `.rbs` files alongside `.rb` sources to supplement type and API information.
+
+## `#-` comment block separators (0.9.40)
 
 YARD now recognizes a trailing `#-` line as a separator between comment
 blocks. This is useful when you want to keep a file header comment at the top
@@ -22,7 +26,7 @@ In the example above, the file header stays disconnected from `Client`.
 Note that `# -` does **not** act as a separator; only an attached `#-`
 line has this behavior.
 
-## Ruby 4.x support
+## Ruby 4.x support (0.9.39)
 
 Added support for Ruby 4.x along with new syntaxes.
 

@@ -1,5 +1,6 @@
 # main
 
+- Add support for Ruby .rbs files (docstrings included)
 - Add support for `#-` as a comment-block separator. See Getting Started Guide.
 - Fix false self-referential mixin when bare name matches ancestor namespace (#1672)
 - Fix bracket/brace map corruption from Ruby 3.0+ pattern matching deconstruction (#1671)

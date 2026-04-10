@@ -69,6 +69,16 @@ module YARD
       autoload :MethodHandler,            __p('handlers/common/method_handler')
     end
 
+    # RBS type signature handlers
+    module RBS
+      autoload :Base,               __p('handlers/rbs/base')
+      autoload :AttributeHandler,   __p('handlers/rbs/attribute_handler')
+      autoload :ConstantHandler,    __p('handlers/rbs/constant_handler')
+      autoload :MethodHandler,      __p('handlers/rbs/method_handler')
+      autoload :MixinHandler,       __p('handlers/rbs/mixin_handler')
+      autoload :NamespaceHandler,   __p('handlers/rbs/namespace_handler')
+    end
+
     # CRuby Handlers
     # @since 0.8.0
     module C
@@ -181,6 +191,12 @@ module YARD
       autoload :RubyParser,        __p('parser/ruby/ruby_parser')
       autoload :RipperParser,      __p('parser/ruby/ruby_parser')
       autoload :TokenResolver,     __p('parser/ruby/token_resolver')
+    end
+
+    # RBS type signature parser
+    module RBS
+      autoload :RbsParser, __p('parser/rbs/rbs_parser')
+      autoload :Statement, __p('parser/rbs/statement')
     end
 
     autoload :Base,                __p('parser/base')
