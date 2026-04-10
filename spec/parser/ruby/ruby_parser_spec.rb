@@ -476,6 +476,29 @@ eof
       expect(ast.first.last.last.docstring).to eq "end comment"
     end
 
+    it "ignores comments whose last line is a lone hyphen" do
+      Registry.clear
+      ast = YARD.parse_string(<<-eof).enumerator
+        # title
+        #-
+        class Foo; end
+      eof
+
+      expect(ast.first.docstring).to be_nil
+      expect(ast.map(&:type)).not_to include(:comment)
+    end
+
+    it "does not ignore comments when the hyphen is spaced from the hash" do
+      Registry.clear
+      ast = YARD.parse_string(<<-eof).enumerator
+        # title
+        # -
+        class Foo; end
+      eof
+
+      expect(ast.first.docstring).to eq "title\n-"
+    end
+
     it "does not group comments if they don't begin the line" do
       Registry.clear
       YARD.parse_string(<<-eof).enumerator

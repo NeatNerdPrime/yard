@@ -1,5 +1,9 @@
 # main
 
+- Add support for `#-` as a comment-block separator. See Getting Started Guide.
+- Fix false self-referential mixin when bare name matches ancestor namespace (#1672)
+- Fix bracket/brace map corruption from Ruby 3.0+ pattern matching deconstruction (#1671)
+
 # [0.9.39] - April 8th, 2026
 
 [0.9.39]: https://github.com/lsegal/yard/compare/v0.9.38...v0.9.39

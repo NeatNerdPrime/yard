@@ -61,6 +61,28 @@ Using tags we can add semantic metadata to our code without worrying about
 presentation. YARD will handle presentation for us when we decide to generate
 documentation later.
 
+### Disconnecting Comment Blocks
+
+YARD attaches a comment block to the next relevant object by default. That is
+usually what you want, but file headers are a common exception. If you keep a
+copyright notice, license note or general file-level description at the top of
+the file, it can accidentally become the docstring for the first class or
+module unless you explicitly break the block.
+
+To disconnect the block, end the header with an attached `#-` line:
+
+    # Copyright (c) Example Corp
+    # Shared support code for the client layer.
+    #-
+
+    class Client
+    end
+
+In this example, the header comment is not attached to `Client`.
+
+This only works with `#-`. If you write `# -` with a space before the hyphen,
+YARD treats it as a normal comment line and it remains part of the docstring.
+
 ## Which Markup Format?
 
 YARD does not impose a specific markup. The above example uses standard RDoc

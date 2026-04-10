@@ -1,5 +1,35 @@
 # @title What's New?
 
+# What's New in 0.9.x?
+
+## `#-` comment block separators
+
+YARD now recognizes a trailing `#-` line as a separator between comment
+blocks. This is useful when you want to keep a file header comment at the top
+of a Ruby file without having that header attach itself to the first class,
+module or method in the file.
+
+For example:
+
+    # Copyright (c) Example Corp
+    # This file defines support code shared by the client.
+    #-
+
+    class Client
+    end
+
+In the example above, the file header stays disconnected from `Client`.
+Note that `# -` does **not** act as a separator; only an attached `#-`
+line has this behavior.
+
+## Ruby 4.x support
+
+Added support for Ruby 4.x along with new syntaxes.
+
+## Other changes
+
+See the [CHANGELOG](CHANGELOG.md) for a full list of changes in 0.9.x.
+
 # What's New in 0.8.x?
 
 1. **Directives (new behavioural tag syntax)** (0.8.0)

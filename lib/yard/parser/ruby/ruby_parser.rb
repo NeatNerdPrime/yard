@@ -746,6 +746,11 @@ module YARD
         def add_comment(line, node = nil, before_node = nil, into = false)
           comment = @comments[line]
           source_range = @comments_range[line]
+          if comment && source_range
+            source = @source[source_range]
+            last_line = source.lines.to_a.last
+            return if last_line && last_line =~ /^\s*\#-\s*$/
+          end
           line_range = ((line - comment.count("\n"))..line)
           if node.nil?
             node = CommentNode.new(:comment, [comment], :line => line_range, :char => source_range)
