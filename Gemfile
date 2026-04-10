@@ -25,7 +25,8 @@ group :textile do
 end
 
 group :server do
-  gem 'rackup'
+  gem 'rackup' if RUBY_VERSION >= '2.4.0'
+  gem 'rack', '~> 2.0' if RUBY_VERSION < '2.4.0'
 end
 
 group :i18n do
