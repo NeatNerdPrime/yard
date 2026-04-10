@@ -4,10 +4,10 @@ source 'https://rubygems.org'
 group :development do
   gem 'rspec'
   gem 'rake'
-  gem 'rdoc'
+  gem 'rdoc', RUBY_VERSION < '2.7.0' ? '~> 6.0' : nil
   gem 'json'
-  gem 'simplecov' if RUBY_VERSION >= '2.7.'
-  gem 'coveralls_reborn', :require => false if RUBY_VERSION >= '2.7.'
+  gem 'simplecov' if RUBY_VERSION >= '2.7.0'
+  gem 'coveralls_reborn', :require => false if RUBY_VERSION >= '2.7.0'
   gem 'webrick'
 end
 
@@ -25,8 +25,8 @@ group :textile do
 end
 
 group :server do
-  gem 'rackup' if RUBY_VERSION >= '2.4.0'
-  gem 'rack', '~> 2.0' if RUBY_VERSION < '2.4.0'
+  gem 'rackup' if RUBY_VERSION >= '2.6.0'
+  gem 'rack', '~> 2.0' if RUBY_VERSION < '2.6.0'
 end
 
 group :i18n do
