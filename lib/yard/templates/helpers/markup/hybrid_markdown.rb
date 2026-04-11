@@ -1,5 +1,9 @@
-require 'cgi'
-require 'uri'
+# frozen_string_literal: true
+if RUBY_VERSION < '3.5'
+  require 'cgi/util'
+else
+  require 'cgi/escape'
+end
 
 module YARD
   module Templates
@@ -265,7 +269,7 @@ module YARD
               index += 1
             end
 
-            html = "<table>\n<thead>\n<tr>\n"
+            html = "<table>\n<thead>\n<tr>\n".dup
             header.each_with_index do |cell, i|
               attrs = alignments[i] ? %( align="#{alignments[i]}") : ""
               html << "<th#{attrs}>#{format_inline(cell)}</th>\n"
@@ -290,7 +294,6 @@ module YARD
             start_attr = ordered && marker[:start] != 1 ? %( start="#{marker[:start]}") : ''
             items = []
             tight = true
-            loose_by_separator = false
             list_indent = marker[:indent]
 
             while index < lines.length
@@ -322,7 +325,6 @@ module YARD
                     (next_marker[:indent] == item_marker[:indent] || (blank_seen && next_marker[:indent] <= list_indent + 3))
                   if blank_seen
                     tight = false
-                    loose_by_separator = true
                   end
                   break
                 end
@@ -534,7 +536,7 @@ module YARD
           end
 
           def protect_code_spans(text, placeholders)
-            output = ''
+            output = String.new
             index = 0
 
             while index < text.length
@@ -661,8 +663,8 @@ module YARD
                   :position => output.length,
                   :left_consumed => 0,
                   :right_consumed => 0,
-                  :opening_html => '',
-                  :closing_html => '',
+                  :opening_html => String.new,
+                  :closing_html => String.new,
                   :can_open => can_open,
                   :can_close => can_close
                 }
@@ -1071,7 +1073,7 @@ module YARD
               if delimiter == '"' || delimiter == "'" || delimiter == '('
                 index += 1
                 start = index
-                buffer = ''
+                buffer = String.new
                 while index < definition.length
                   char = definition[index, 1]
                   if char == '\\' && index + 1 < definition.length
@@ -1100,7 +1102,7 @@ module YARD
           end
 
           def replace_inline_constructs(text, placeholders, prefix)
-            output = ''
+            output = String.new
             index = 0
 
             while index < text.length
@@ -1148,7 +1150,7 @@ module YARD
           end
 
           def scan_reference_constructs(text, placeholders, kind)
-            output = ''
+            output = String.new
             index = 0
 
             while index < text.length
@@ -1298,7 +1300,7 @@ module YARD
             if text[index, 1] == '"' || text[index, 1] == "'"
               delimiter = text[index, 1]
               index += 1
-              buffer = ''
+              buffer = String.new
               while index < text.length
                 char = text[index, 1]
                 if char == '\\' && index + 1 < text.length
@@ -1315,7 +1317,7 @@ module YARD
               index += 1
             elsif text[index, 1] == '('
               index += 1
-              buffer = ''
+              buffer = String.new
               depth = 1
               while index < text.length
                 char = text[index, 1]
@@ -1373,10 +1375,6 @@ module YARD
             text.gsub(ENTITY_RE) do |entity|
               decode_entity(entity)
             end
-          end
-
-          def unescape_markdown_punctuation(text)
-            text.to_s.gsub(/\\([\\`*_{}\[\]()#+\-.!<>~|])/, '\1')
           end
 
           def reference_definition_continuation?(line)
@@ -1479,8 +1477,8 @@ module YARD
           end
 
           def escape_list_marker_text(line)
-            source = line.to_s
-            newline = source.sub!(/\n\z/, '') ? "\n" : ''
+            source = line.to_s.sub(/\n\z/, '')
+            newline = source.length == line.to_s.length ? '' : "\n"
 
             if source =~ /\A([*+-])([ \t].*)\z/
               "\\#{$1}#{$2}#{newline}"
@@ -1579,7 +1577,7 @@ module YARD
           end
 
           def split_reference_container_prefix(line)
-            prefix = ''
+            prefix = String.new
             content = line.chomp
 
             while (split = split_blockquote_prefix(content))
@@ -1656,7 +1654,7 @@ module YARD
           end
 
           def percent_encode_url(text, allowed_re)
-            encoded = ''
+            encoded = String.new
 
             each_char_compat(text.to_s) do |char|
               if ascii_only_compat?(char) && char =~ /\A#{allowed_re.source}\z/
@@ -1951,7 +1949,7 @@ module YARD
 
           def unicode_casefold_compat(text)
             codepoints = text.to_s.unpack('U*')
-            folded = ''
+            folded = String.new
 
             codepoints.each do |codepoint|
               append_folded_codepoint(folded, codepoint)

@@ -169,7 +169,7 @@ RSpec.describe YARD::Templates::Helpers::HtmlHelper do
       expect(html).to match %r{<td>NC</td>}
     end
 
-    it "handles fenced code blocks (Redcarpet specific)" do
+    it "handles fenced code blocks" do
       markdown = "Introduction:\n```ruby\nputs\n\nputs\n```"
       html = htmlify(markdown, :markdown)
       expect(html).to match %r{^<p>Introduction:</p>.*<code class="ruby">}m
