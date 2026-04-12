@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.executables   = ['yard', 'yardoc', 'yri']
   s.license = 'MIT' if s.respond_to?(:license=)
+  s.required_ruby_version = '>= 1.8.7' if s.respond_to?(:required_ruby_version=)
   s.metadata['yard.run'] = 'yri'
   s.metadata['changelog_uri'] = 'https://rubydoc.info/gems/yard/file/CHANGELOG.md'
 end
