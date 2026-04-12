@@ -5,6 +5,9 @@
 - Add support for `#-` as a comment-block separator. See Getting Started Guide.
 - Fix false self-referential mixin when bare name matches ancestor namespace (#1672)
 - Fix bracket/brace map corruption from Ruby 3.0+ pattern matching deconstruction (#1671)
+- Fix `@!scope class` on attributes (#1582, #1655, #1666)
+- Fix `@!parse` directives not including source for block (#1665)
+- Fix inherited methods not appearing in groups (#1656)
 
 # [0.9.39] - April 8th, 2026
 
