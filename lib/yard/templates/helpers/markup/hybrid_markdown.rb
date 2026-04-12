@@ -79,6 +79,7 @@ module YARD
           REFERENCE_DEF_START_RE = /^\s{0,3}\[([^\]]+)\]:\s*(.*)$/.freeze
           PLACEHOLDER_RE = /\0(\d+)\0/.freeze
           ESCAPABLE_CHARS_RE = /\\([!"#$%&'()*+,\-.\/:;<=>?@\[\\\]^_`{|}~])/.freeze
+          RDOC_ESCAPED_CAPITALIZED_CROSSREF_RE = /\\((?:::)?(?:[A-Z]\w+|[A-Z]\w*::\w+)(?:::\w+)*)/.freeze
           AUTOLINK_RE = /<([A-Za-z][A-Za-z0-9.+-]{1,31}:[^<>\s]*|[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+)>/.freeze
           TAB_WIDTH = 4
 
@@ -529,6 +530,7 @@ module YARD
             text = protect_hard_breaks(text, placeholders)
             text = protect_inline_images(text, placeholders)
             text = protect_inline_links(text, placeholders)
+            text = protect_single_word_text_links(text, placeholders)
             text = protect_reference_images(text, placeholders)
             text = protect_reference_links(text, placeholders)
             text = protect_escaped_characters(text, placeholders)
@@ -611,6 +613,10 @@ module YARD
           end
 
           def protect_escaped_characters(text, placeholders)
+            text = text.gsub(RDOC_ESCAPED_CAPITALIZED_CROSSREF_RE) do
+              store_placeholder(placeholders, h($1))
+            end
+
             text.gsub(ESCAPABLE_CHARS_RE) { store_placeholder(placeholders, h($1)) }
           end
 
@@ -648,6 +654,42 @@ module YARD
 
           def protect_reference_links(text, placeholders)
             scan_reference_constructs(text, placeholders, :link)
+          end
+
+          def protect_single_word_text_links(text, placeholders)
+            output = String.new
+            index = 0
+            bracket_depth = 0
+
+            while index < text.length
+              char = text[index, 1]
+
+              if char == '\\' && index + 1 < text.length
+                output << text[index, 2]
+                index += 2
+                next
+              elsif char == '['
+                bracket_depth += 1
+              elsif char == ']' && bracket_depth > 0
+                bracket_depth -= 1
+              end
+
+              if bracket_depth.zero? && (match = text[index..-1].match(/\A([A-Za-z0-9]+)(?=\[)/))
+                label = match[1]
+                dest, consumed = parse_single_word_text_link_destination(text, index + label.length)
+
+                if dest
+                  output << store_placeholder(placeholders, link_html(label, dest))
+                  index += label.length + consumed
+                  next
+                end
+              end
+
+              output << char
+              index += 1
+            end
+
+            output
           end
 
           def format_emphasis(text)
@@ -1364,6 +1406,35 @@ module YARD
             text = text.gsub(/\[([^\]]+)\]\([^)]+\)/, '\1')
             text = text.gsub(/[*_~`]/, '')
             decode_entities(unescape_markdown_punctuation(text))
+          end
+
+          def parse_single_word_text_link_destination(text, index)
+            return [nil, 0] unless text[index, 1] == '['
+
+            dest = String.new
+            cursor = index + 1
+
+            while cursor < text.length
+              char = text[cursor, 1]
+
+              if char == '\\'
+                escaped = text[cursor + 1, 1]
+                return [nil, 0] unless escaped && "[]\\*+<_".include?(escaped)
+
+                dest << escaped
+                cursor += 2
+                next
+              end
+
+              return [nil, 0] if char =~ /\s/
+              return [dest, cursor - index + 1] if char == ']'
+              return [nil, 0] if char == '['
+
+              dest << char
+              cursor += 1
+            end
+
+            [nil, 0]
           end
 
           def link_html(label, dest, title = nil)

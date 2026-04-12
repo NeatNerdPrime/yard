@@ -123,6 +123,24 @@ HTML
       )
     end
 
+    it "renders rdoc single-word text links" do
+      expect(to_html('YARD[https://yardoc.org]')).to eq(
+        '<p><a href="https://yardoc.org">YARD</a></p>'
+      )
+    end
+
+    it "renders rdoc single-word text links with escaped brackets in the destination" do
+      expect(to_html('query[https://example.com/?q=\[\]]')).to eq(
+        '<p><a href="https://example.com/?q=[]">query</a></p>'
+      )
+    end
+
+    it "does not render rdoc single-word text links inside brackets" do
+      expect(to_html('[YARD[doc/README_md.html]]')).to eq(
+        '<p>[YARD[doc/README_md.html]]</p>'
+      )
+    end
+
     it "renders inline images" do
       expect(to_html('![Alt](https://example.com/a.png "Title")')).to eq(
         '<p><img src="https://example.com/a.png" alt="Alt" title="Title" /></p>'
@@ -186,6 +204,10 @@ HTML
 
     it "supports markdown backslash escapes" do
       expect(to_html('\*literal\* \> quote')).to eq('<p>*literal* &gt; quote</p>')
+    end
+
+    it "supports rdoc backslash escapes for capitalized cross references" do
+      expect(to_html('\RDoc \RDoc::Markup')).to eq('<p>RDoc RDoc::Markup</p>')
     end
 
     it "preserves HTML tags inline" do
