@@ -28,7 +28,7 @@ RSpec.describe YARD::Templates::Helpers::Markup::HybridMarkdown, 'CommonMark 0.3
     describe section do
       section_examples.each do |example|
         it "matches example #{example[:example]} from lines #{example[:start_line]}-#{example[:end_line]}" do
-          actual = described_class.new(example[:markdown]).to_html
+          actual = described_class.new(example[:markdown], :heading_ids => false).to_html
           expected = example[:html].sub(/\n\z/, '')
           expect(actual).to eq(expected)
         end

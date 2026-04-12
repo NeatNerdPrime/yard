@@ -7,12 +7,18 @@ RSpec.describe YARD::Templates::Helpers::Markup::HybridMarkdown do
 
   describe "markdown block syntax" do
     it "renders ATX headings" do
-      expect(to_html("## Heading")).to eq('<h2>Heading</h2>')
+      expect(to_html("## Heading")).to eq('<h2 id="Heading">Heading</h2>')
     end
 
     it "renders setext headings" do
-      expect(to_html("Heading\n---")).to eq('<h2>Heading</h2>')
-      expect(to_html("Heading\n===")).to eq('<h1>Heading</h1>')
+      expect(to_html("Heading\n---")).to eq('<h2 id="Heading">Heading</h2>')
+      expect(to_html("Heading\n===")).to eq('<h1 id="Heading">Heading</h1>')
+      expect(to_html("= Heading\n")).to eq('<h1 id="Heading">Heading</h1>')
+    end
+
+    it "generates id from heading text with non-word chars replaced by underscores" do
+      expect(to_html("## Hello, World!")).to eq('<h2 id="Hello__World_">Hello, World!</h2>')
+      expect(to_html("## foo-bar baz")).to eq('<h2 id="foo_bar_baz">foo-bar baz</h2>')
     end
 
     it "renders thematic breaks" do
@@ -197,7 +203,7 @@ HTML
 
   describe "rdoc compatibility" do
     it "renders rdoc headings" do
-      expect(to_html("== Heading")).to eq('<h2>Heading</h2>')
+      expect(to_html("== Heading")).to eq('<h2 id="Heading">Heading</h2>')
     end
 
     it "renders rdoc typewriter spans" do

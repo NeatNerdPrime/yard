@@ -82,11 +82,16 @@ module YARD
           AUTOLINK_RE = /<([A-Za-z][A-Za-z0-9.+-]{1,31}:[^<>\s]*|[A-Za-z0-9.!#$%&'*+\/=?^_`{|}~-]+@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?)+)>/.freeze
           TAB_WIDTH = 4
 
-          def initialize(text)
+          # @param text [String] the Markdown text to format.
+          # @param options [Hash] options for the formatter.
+          # @option options [Boolean] :heading_ids whether to generate id attributes for headings.
+          def initialize(text, options = {})
+            @heading_ids = options.fetch(:heading_ids, true)
             @references = {}
             @text = extract_reference_definitions(text.to_s.gsub(/\r\n?/, "\n"))
           end
 
+          # @return [String] the formatted HTML.
           def to_html
             parse_blocks(split_lines(@text), 0).join("\n")
           end
@@ -169,7 +174,7 @@ module YARD
             return nil if heading_text =~ /\A[=\-]+\z/
 
             level = [heading_marks.length, 6].min
-            "<h#{level}>#{format_inline(heading_text)}</h#{level}>"
+            "<h#{level}#{heading_id(heading_text)}>#{format_inline(heading_text)}</h#{level}>"
           end
 
           def parse_setext_heading(lines, index)
@@ -193,7 +198,7 @@ module YARD
 
                 level = $1.start_with?('=') ? 1 : 2
                 text = content_lines.join("\n")
-                return ["<h#{level}>#{format_inline(text)}</h#{level}>", current_index + 1]
+                return ["<h#{level}#{heading_id(text)}>#{format_inline(text)}</h#{level}>", current_index + 1]
               end
 
               if current_index > index && block_boundary?(line)
@@ -926,6 +931,12 @@ module YARD
             [url, trailer]
           end
 
+          def heading_id(text)
+            return '' unless @heading_ids
+
+            " id=\"#{text.gsub(/\W/, '_')}\""
+          end
+
           def parse_atx_heading(line)
             stripped = line.chomp.sub(/^\s{0,3}/, '')
             match = stripped.match(/\A(#{'#' * 6}|#{'#' * 5}|#{'#' * 4}|#{'#' * 3}|#{'#' * 2}|#)(?=[ \t]|$)(.*)\z/)
@@ -937,7 +948,7 @@ module YARD
             content = content.sub(/[ \t]+#+[ \t]*\z/, '')
             content = '' if content =~ /\A#+\z/
             content = content.rstrip
-            "<h#{level}>#{format_inline(content)}</h#{level}>"
+            "<h#{level}#{heading_id(content)}>#{format_inline(content)}</h#{level}>"
           end
 
           def parse_fence_opener(line)
