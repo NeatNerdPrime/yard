@@ -1,5 +1,9 @@
 # main
 
+# [0.9.40] - April 12th, 2026
+
+[0.9.40]: https://github.com/lsegal/yard/compare/v0.9.39...v0.9.40
+
 - Add support for Ruby .rbs files (docstrings included) (#1673)
 - Add built-in hybrid RDoc/Markdown renderer (`HybridMarkdown`) requiring no external gems (#1674)
 - Add support for `#-` as a comment-block separator. See Getting Started Guide.
