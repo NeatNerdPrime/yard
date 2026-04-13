@@ -53,16 +53,16 @@ namespace :release do
 
       release_heading = "# [#{version}] - #{format_release_date(date)}"
       compare_link = "[#{version}]: https://github.com/lsegal/yard/compare/v#{previous_version}...v#{version}"
-      replacement = <<~TEXT
-        # main
-
-        #{release_heading}
-
-        #{compare_link}
-
-        #{entries}
-
-      TEXT
+      replacement = [
+        '# main',
+        '',
+        release_heading,
+        '',
+        compare_link,
+        '',
+        entries,
+        ''
+      ].join("\n")
 
       File.write(CHANGELOG_FILE, contents.sub(match[0], replacement))
     end
