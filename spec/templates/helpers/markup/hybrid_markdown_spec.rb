@@ -129,6 +129,12 @@ HTML
       )
     end
 
+    it "renders rdoc braced text links when a bracketed destination follows" do
+      expect(to_html('{YARD Docs}[https://yardoc.org]')).to eq(
+        '<p><a href="https://yardoc.org">YARD Docs</a></p>'
+      )
+    end
+
     it "renders rdoc single-word text links with escaped brackets in the destination" do
       expect(to_html('query[https://example.com/?q=\[\]]')).to eq(
         '<p><a href="https://example.com/?q=[]">query</a></p>'

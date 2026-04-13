@@ -530,6 +530,7 @@ module YARD
             text = protect_hard_breaks(text, placeholders)
             text = protect_inline_images(text, placeholders)
             text = protect_inline_links(text, placeholders)
+            text = protect_braced_text_links(text, placeholders)
             text = protect_single_word_text_links(text, placeholders)
             text = protect_reference_images(text, placeholders)
             text = protect_reference_links(text, placeholders)
@@ -588,7 +589,12 @@ module YARD
 
           def protect_yard_links(text, placeholders)
             text.gsub(YARD_LINK_RE) do
-              store_placeholder(placeholders, $&)
+              match = Regexp.last_match
+              if text[match.end(0), 1] == '['
+                match[0]
+              else
+                store_placeholder(placeholders, match[0])
+              end
             end
           end
 
@@ -676,7 +682,7 @@ module YARD
 
               if bracket_depth.zero? && (match = text[index..-1].match(/\A([A-Za-z0-9]+)(?=\[)/))
                 label = match[1]
-                dest, consumed = parse_single_word_text_link_destination(text, index + label.length)
+                dest, consumed = parse_text_link_destination(text, index + label.length)
 
                 if dest
                   output << store_placeholder(placeholders, link_html(label, dest))
@@ -686,6 +692,38 @@ module YARD
               end
 
               output << char
+              index += 1
+            end
+
+            output
+          end
+
+          def protect_braced_text_links(text, placeholders)
+            output = String.new
+            index = 0
+
+            while index < text.length
+              if text[index, 1] == '\\' && index + 1 < text.length
+                output << text[index, 2]
+                index += 2
+                next
+              end
+
+              if text[index, 1] == '{'
+                label_end = find_braced_text_link_label_end(text, index)
+                if label_end
+                  label = text[(index + 1)...label_end]
+                  dest, consumed = parse_text_link_destination(text, label_end + 1)
+
+                  if dest
+                    output << store_placeholder(placeholders, link_html(label, dest))
+                    index = label_end + 1 + consumed
+                    next
+                  end
+                end
+              end
+
+              output << text[index, 1]
               index += 1
             end
 
@@ -1408,7 +1446,7 @@ module YARD
             decode_entities(unescape_markdown_punctuation(text))
           end
 
-          def parse_single_word_text_link_destination(text, index)
+          def parse_text_link_destination(text, index)
             return [nil, 0] unless text[index, 1] == '['
 
             dest = String.new
@@ -1435,6 +1473,24 @@ module YARD
             end
 
             [nil, 0]
+          end
+
+          def find_braced_text_link_label_end(text, index)
+            cursor = index + 1
+
+            while cursor < text.length
+              char = text[cursor, 1]
+
+              if char == '\\'
+                cursor += 2
+                next
+              end
+
+              return cursor if char == '}'
+              cursor += 1
+            end
+
+            nil
           end
 
           def link_html(label, dest, title = nil)
