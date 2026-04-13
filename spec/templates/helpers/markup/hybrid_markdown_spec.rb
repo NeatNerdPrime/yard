@@ -277,6 +277,31 @@ HTML
 HTML
     end
 
+    it "treats a blank-line indented block inside a list item as code even when it starts with a heading marker" do
+      html = described_class.new(<<-'MARKDOWN').to_html
+- Input bytes of length <em>3n+2</em> generate padded output characters
+  of length <em>4(n+1)</em>, with one padding character at the end:
+
+    # n = 1:  5 bytes => 8 characters.
+    Base64.strict_encode64('12345')    # => "MDEyMzQ="
+    # n = 2:  8 bytes => 12 characters.
+    Base64.strict_encode64('12345678') # => "MDEyMzQ1Njc="
+MARKDOWN
+      expect(html).to eq(<<-'HTML'.chomp)
+<ul>
+<li>
+<p>Input bytes of length <em>3n+2</em> generate padded output characters
+of length <em>4(n+1)</em>, with one padding character at the end:</p>
+<pre><code># n = 1:  5 bytes =&gt; 8 characters.
+Base64.strict_encode64('12345')    # =&gt; &quot;MDEyMzQ=&quot;
+# n = 2:  8 bytes =&gt; 12 characters.
+Base64.strict_encode64('12345678') # =&gt; &quot;MDEyMzQ1Njc=&quot;
+</code></pre>
+</li>
+</ul>
+HTML
+    end
+
     it "does not treat insufficiently indented text after a list as a verbatim block" do
       expect(described_class.new("-    foo\n\n  bar\n").to_html).to eq(<<-'HTML'.chomp)
 <ul>

@@ -112,6 +112,10 @@ module YARD
                 block, index = parse_yard_indented_code(lines, index)
                 blocks << block
                 previous_block_type = :code
+              elsif indented_code_block_start?(lines, index, previous_block_type)
+                block, index = parse_indented_code(lines, index)
+                blocks << block
+                previous_block_type = :code
               elsif thematic_break?(line)
                 blocks << '<hr />'
                 index += 1
@@ -148,10 +152,6 @@ module YARD
                 block, index = parse_html_block(lines, index)
                 blocks << block
                 previous_block_type = :html
-              elsif indented_code_block_start?(lines, index, previous_block_type)
-                block, index = parse_indented_code(lines, index)
-                blocks << block
-                previous_block_type = :code
               else
                 block, index = parse_paragraph(lines, index)
                 blocks << block unless block.empty?
@@ -919,6 +919,8 @@ module YARD
             return false unless indented_code_start?(lines[index])
             return true if leading_columns(lines[index]) >= 4
             return false if previous_block_type == :list
+            return false if html_block_start?(lines[index])
+            return false if parse_setext_heading(lines, index)
 
             !index.zero? && blank_line?(lines[index - 1])
           end
