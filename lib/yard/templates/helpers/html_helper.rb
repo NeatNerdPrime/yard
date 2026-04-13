@@ -93,10 +93,16 @@ module YARD
                              :tables,
                              :with_toc_data,
                              :no_intraemphasis).to_html
+        when 'Commonmarker'
+          provider.to_html(text, :options => { }, :plugins => { :syntax_highlighter => nil })
         when 'CommonMarker'
-          CommonMarker.render_html(text, %i[DEFAULT GITHUB_PRE_LANG], %i[autolink table])
+          provider.render_html(text, %i[DEFAULT GITHUB_PRE_LANG], %i[autolink table])
         else
-          provider.new(text).to_html
+          if provider.respond_to?(:to_html)
+            provider.to_html(text)
+          else
+            provider.new(text).to_html
+          end
         end
       end
 

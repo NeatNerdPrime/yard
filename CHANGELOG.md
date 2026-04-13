@@ -3,6 +3,7 @@
 - Add support for Ruby .rbs files (docstrings included) (#1673)
 - Add built-in hybrid RDoc/Markdown renderer (`HybridMarkdown`) requiring no external gems (#1674)
 - Add support for `#-` as a comment-block separator. See Getting Started Guide.
+- Add support for `commonmarker` version `>= 1.0`.
 - Remove usage of jQuery in default templates. jQuery library is still packaged in templates for backward compatibility (#1675)
 - Fix false self-referential mixin when bare name matches ancestor namespace (#1672)
 - Fix bracket/brace map corruption from Ruby 3.0+ pattern matching deconstruction (#1671)

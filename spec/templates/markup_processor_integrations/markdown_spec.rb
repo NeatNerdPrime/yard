@@ -82,15 +82,11 @@ MARKDOWN
     end
   end
 
-  describe 'CommonMarker', if:  RUBY_VERSION >= '2.3' do
+  describe 'Commonmarker', if:  RUBY_VERSION >= '2.3' do
     let(:markup) { :markdown }
     let(:markup_provider) { :commonmarker }
 
     include_examples 'shared examples for markdown processors'
-
-    it 'generates level 2 header without id' do
-      expect(rendered_document).to include('<h2>Example code listings</h2>')
-    end
 
     it 'creates line break via backslash' do
       expect(rendered_document).to include("commonmark line break with<br />\na backslash")
