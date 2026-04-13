@@ -503,6 +503,7 @@ module YARD
             while index < lines.length
               line = lines[index]
               break if blank_line?(line)
+              break if !buffer.empty? && colon_indented_code_block_start?(lines, index)
               break if thematic_break?(line)
               break if parse_setext_heading(lines, index)
               break if parse_heading(line)
@@ -918,11 +919,23 @@ module YARD
           def indented_code_block_start?(lines, index, previous_block_type = nil)
             return false unless indented_code_start?(lines[index])
             return true if leading_columns(lines[index]) >= 4
+            return true if colon_indented_code_block_start?(lines, index)
             return false if previous_block_type == :list
             return false if html_block_start?(lines[index])
             return false if parse_setext_heading(lines, index)
 
             !index.zero? && blank_line?(lines[index - 1])
+          end
+
+          def colon_indented_code_block_start?(lines, index)
+            return false if index.zero?
+            return false unless leading_columns(lines[index]) >= 2
+            return false if leading_columns(lines[index]) >= 4
+
+            previous_line = lines[index - 1]
+            return false if blank_line?(previous_line)
+
+            previous_line.rstrip.end_with?(':')
           end
 
           def yard_indented_code_start?(lines, index)

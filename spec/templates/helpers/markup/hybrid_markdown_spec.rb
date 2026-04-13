@@ -52,7 +52,11 @@ HTML
       expect(to_html("intro\n\n  puts 1\n  puts 2\n")).to eq('<p>intro</p><pre><code>puts 1puts 2</code></pre>')
     end
 
-    it "does not treat two-space indentation as an indented code block without a blank line" do
+    it "treats two-space indentation as an indented code block after a colon" do
+      expect(to_html("intro:\n  puts 1\n  puts 2\n")).to eq('<p>intro:</p><pre><code>puts 1puts 2</code></pre>')
+    end
+
+    it "does not treat two-space indentation as an indented code block without a blank line or colon" do
       expect(to_html("intro\n  puts 1\n  puts 2\n")).to eq('<p>introputs 1puts 2</p>')
     end
 
