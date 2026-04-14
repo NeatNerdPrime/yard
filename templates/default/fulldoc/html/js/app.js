@@ -82,30 +82,28 @@
 	}
 
 	function createSourceLinks() {
-		queryAll(".method_details_list .source_code").forEach(
-			(sourceCode) => {
-				const toggleWrapper = document.createElement("span");
-				const link = document.createElement("a");
+		queryAll(".method_details_list .source_code").forEach((sourceCode) => {
+			const toggleWrapper = document.createElement("span");
+			const link = document.createElement("a");
 
-				toggleWrapper.className = "showSource";
-				toggleWrapper.appendChild(document.createTextNode("["));
-				toggleWrapper.appendChild(link);
-				toggleWrapper.appendChild(document.createTextNode("]"));
+			toggleWrapper.className = "showSource";
+			toggleWrapper.appendChild(document.createTextNode("["));
+			toggleWrapper.appendChild(link);
+			toggleWrapper.appendChild(document.createTextNode("]"));
 
-				link.href = "#";
-				link.className = "toggleSource";
-				link.textContent = "View source";
+			link.href = "#";
+			link.className = "toggleSource";
+			link.textContent = "View source";
 
-				link.addEventListener("click", (event) => {
-					event.preventDefault();
-					const expanded = isVisible(sourceCode);
-					toggleDisplay(sourceCode, !expanded, "table");
-					link.textContent = expanded ? "View source" : "Hide source";
-				});
+			link.addEventListener("click", (event) => {
+				event.preventDefault();
+				const expanded = isVisible(sourceCode);
+				toggleDisplay(sourceCode, !expanded, "table");
+				link.textContent = expanded ? "View source" : "Hide source";
+			});
 
-				sourceCode.parentNode.insertBefore(toggleWrapper, sourceCode);
-			},
-		);
+			sourceCode.parentNode.insertBefore(toggleWrapper, sourceCode);
+		});
 	}
 
 	function createDefineLinks() {
@@ -474,8 +472,7 @@
 
 		if (safeSessionStorage.navWidth) {
 			queryAll(".nav_wrap").forEach((node) => {
-				node.style.width =
-					`${Math.max(200, parseInt(safeSessionStorage.navWidth, 10))}px`;
+				node.style.width = `${Math.max(200, parseInt(safeSessionStorage.navWidth, 10))}px`;
 			});
 		}
 	}
