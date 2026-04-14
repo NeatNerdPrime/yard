@@ -2,6 +2,22 @@ name: Unit Tests
 
 on: [push, pull_request, workflow_dispatch]
 jobs:
+  js_lint:
+    name: "Lint: JS / CSS"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Run Biome lint
+        run: npx --yes @biomejs/biome lint .
+      - name: Run Biome format check
+        run: npx --yes @biomejs/biome format --check .
+
   build:
     name: "Ruby: ${{ matrix.ruby }} OS: ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}

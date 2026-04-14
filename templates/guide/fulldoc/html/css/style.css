@@ -103,28 +103,28 @@ ul {
 	font-size: 16px;
 	color: #3e4349;
 }
-#filecontents table,
-.docstring table {
+.docstring table,
+#filecontents table {
 	border-collapse: collapse;
 }
-#filecontents table th,
-#filecontents table td,
 .docstring table th,
-.docstring table td {
+.docstring table td,
+#filecontents table th,
+#filecontents table td {
 	border: 1px solid #ccc;
 	padding: 8px;
 	padding-right: 17px;
 }
-#filecontents table tr:nth-child(odd),
-.docstring table tr:nth-child(odd) {
+.docstring table tr:nth-child(odd),
+#filecontents table tr:nth-child(odd) {
 	background: #eee;
 }
-#filecontents table tr:nth-child(even),
-.docstring table tr:nth-child(even) {
+.docstring table tr:nth-child(even),
+#filecontents table tr:nth-child(even) {
 	background: #fff;
 }
-#filecontents table th,
-.docstring table th {
+.docstring table th,
+#filecontents table th {
 	background: #fff;
 }
 .docstring .note {
@@ -182,6 +182,13 @@ ul {
 	width: 940px;
 	margin: 0px auto;
 }
+a {
+	color: #268;
+	text-decoration: none;
+}
+a:hover {
+	color: #6ae;
+}
 #top_nav {
 	background: #7d0;
 	padding: 8px 12px;
@@ -210,7 +217,6 @@ ul {
 #sidebar {
 	float: left;
 	width: 200px;
-	float: left;
 	padding: 18px 10px;
 	padding-top: 0;
 }
@@ -254,20 +260,6 @@ ul {
 #footer a {
 	color: #444;
 }
-#links strong {
-	font-size: 0.95em;
-	font-weight: normal;
-	color: #000;
-}
-
-a {
-	color: #268;
-	text-decoration: none;
-}
-a:hover {
-	color: #6ae;
-}
-
 /* syntax highlighting */
 .source_code {
 	display: none;
@@ -275,13 +267,19 @@ a:hover {
 	border-left: 8px solid #ddd;
 	margin-top: 5px;
 }
-#filecontents pre.code,
+pre.code {
+	color: #3e4349;
+}
+pre.code a {
+	border-bottom: 1px dotted #bbf;
+}
 .docstring pre.code,
+#filecontents pre.code,
 .source_code pre {
 	font-family: monospace;
 }
-#filecontents pre.code,
-.docstring pre.code {
+.docstring pre.code,
+#filecontents pre.code {
 	display: block;
 }
 .source_code .lines {
@@ -289,8 +287,8 @@ a:hover {
 	color: #555;
 	text-align: right;
 }
-#filecontents pre.code,
 .docstring pre.code,
+#filecontents pre.code,
 .tags pre.example {
 	font-size: 0.9em;
 	padding: 7px 30px;
@@ -299,9 +297,6 @@ a:hover {
 	background: #eee;
 	line-height: 1.3em;
 	font-family: "Consolas", "BitStream Vera Sans Mono", monospace;
-}
-pre.code {
-	color: #3e4349;
 }
 pre.code .info.file {
 	color: #555;
@@ -356,6 +351,8 @@ pre.code .regexp,
 .dregexp {
 	color: #036a07;
 }
-pre.code a {
-	border-bottom: 1px dotted #bbf;
+#links strong {
+	font-size: 0.95em;
+	font-weight: normal;
+	color: #000;
 }
