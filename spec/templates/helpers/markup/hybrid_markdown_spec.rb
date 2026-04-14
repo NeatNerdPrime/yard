@@ -157,6 +157,28 @@ HTML
       )
     end
 
+    it "renders whitespace-delimited rdoc-image URLs as inline images" do
+      expect(to_html('See rdoc-image:https://example.com/a.png now')).to eq(
+        '<p>See <img src="https://example.com/a.png" alt="" /> now</p>'
+      )
+    end
+
+    it "does not render rdoc-image URLs without whitespace separation" do
+      html = to_html('prefixrdoc-image:https://example.com/a.png suffix')
+      expect(html).not_to include('<img ')
+      expect(html).to include('prefixrdoc-image:')
+
+      html = to_html('prefix(rdoc-image:https://example.com/a.png suffix')
+      expect(html).not_to include('<img ')
+      expect(html).to include('prefix(rdoc-image:')
+    end
+
+    it "does not render rdoc-image URLs inside code spans" do
+      expect(to_html('`rdoc-image:https://example.com/a.png`')).to eq(
+        '<p><code>rdoc-image:https://example.com/a.png</code></p>'
+      )
+    end
+
     it "renders full reference-style links" do
       expect(described_class.new("[x][1]\n\n[1]: https://example.com\n").to_html).to eq(
         '<p><a href="https://example.com">x</a></p>'

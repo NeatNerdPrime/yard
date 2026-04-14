@@ -529,6 +529,7 @@ module YARD
             text = protect_code_spans(text, placeholders)
             text = protect_autolinks(text, placeholders)
             text = protect_hard_breaks(text, placeholders)
+            text = protect_rdoc_images(text, placeholders)
             text = protect_inline_images(text, placeholders)
             text = protect_inline_links(text, placeholders)
             text = protect_braced_text_links(text, placeholders)
@@ -633,6 +634,14 @@ module YARD
 
           def protect_hard_breaks(text, placeholders)
             text.gsub(/(?:\\|\s{2,})\n/) { store_placeholder(placeholders, "<br />\n") }
+          end
+
+          def protect_rdoc_images(text, placeholders)
+            text.gsub(/(^|[ \t\n])rdoc-image:([A-Za-z][A-Za-z0-9+.-]*:\/\/\S+)(?=$|[ \t\n])/) do
+              prefix = Regexp.last_match(1)
+              dest = Regexp.last_match(2)
+              prefix + store_placeholder(placeholders, image_html('', dest))
+            end
           end
 
           def protect_inline_images(text, placeholders)

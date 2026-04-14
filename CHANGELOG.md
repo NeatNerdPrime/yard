@@ -1,5 +1,9 @@
 # main
 
+- Add support for `rdoc-image:...` syntax in HybridMarkup (#1676)
+- Add support for colon suffix code blocks in HybridMarkup (rdoc compatibility)
+- Fix responsiveness and state issues with nav frame links in `yard server`
+
 # [0.9.40] - April 12th, 2026
 
 [0.9.40]: https://github.com/lsegal/yard/compare/v0.9.39...v0.9.40
