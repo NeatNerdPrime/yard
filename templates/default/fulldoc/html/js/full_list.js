@@ -343,12 +343,13 @@
       current = current.parentElement;
     }
 
+    highlight();
+
     if (!isInView(target)) {
       window.scrollTo(
         window.scrollX,
         target.getBoundingClientRect().top + window.scrollY - 250
       );
-      highlight();
     }
   }
 
@@ -368,5 +369,6 @@
     enableToggles();
     populateSearchCache();
     enableSearch();
+    highlight();
   });
 })();

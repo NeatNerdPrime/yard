@@ -1,5 +1,7 @@
 # main
 
+- Fix alternating rows when loading a module in default HTML templates with subelements in the nav frame
+
 # [0.9.41] - April 14th, 2026
 
 [0.9.41]: https://github.com/lsegal/yard/compare/v0.9.40...v0.9.41
