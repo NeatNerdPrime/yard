@@ -69,35 +69,10 @@ method {YARD::Parser::SourceParser.register_parser_type}:
 The last argument can be a single extension, a list of extensions (Array), a single Regexp, or a
 list of Regexps. Do not include the '.' in the extension.
 
+## RubyParser
 
-## The Two Ruby Parser Types
-
-When parsing Ruby, the SourceParser can either instantiate the new {YARD::Parser::Ruby::RubyParser}
-class or the {YARD::Parser::Ruby::Legacy::StatementList} class. The first of the
-two, although faster, more robust and more efficient, is only available for
-Ruby 1.9. The legacy parser parser is available in both 1.8.x and 1.9, if
-compatibility is required. The choice of parser will affect which handlers
-ultimately get used, since new handlers can only use the new parser and the
-same requirement applies to the legacy parser & handlers.
-
-## Switching to Legacy Parser
-
-By default, running YARD under Ruby 1.9 will automatically select the new parser
-and new handlers by extension. Although YARD supports both handler styles, plugins
-may choose to only implement one of the two (though this is not recommended). If
-only the legacy handlers are implemented, the `SourceParser` class should force
-the use of the legacy parser by setting the `parser_type` attribute as such:
-
-    YARD::Parser::SourceParser.parser_type = :ruby18
-
-The default value is `:ruby`. Note that this cannot be forced the other way around,
-a parser type of `:ruby` cannot be set under Ruby 1.8.x as the new parser is not
-supported under 1.8.
-
-## RubyParser (the New Parser)
-
-The new Ruby parser uses the Ripper library that is packaged as part of stdlib
-in Ruby 1.9. Because of this, it can generate an AST from a string of Ruby input
+The Ruby parser uses the Ripper library that is packaged as part of stdlib.
+Because of this, it can generate an AST from a string of Ruby input
 that is similar to the style of other sexp libraries (such as ParseTree). Each
 node generated in the tree is of the base type {YARD::Parser::Ruby::AstNode},
 which has some subclasses for common node types.
