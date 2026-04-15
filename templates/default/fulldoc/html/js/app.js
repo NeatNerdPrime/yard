@@ -8,6 +8,7 @@
 		loadingIndicatorTimer: null,
 		navExpanderTimer: null,
 		navExpanderToken: 0,
+		currentUrl: window.location.href,
 	};
 	const appState = window.__yardAppState;
 	let safeLocalStorage = {};
@@ -342,6 +343,7 @@
 		const content = query("#content");
 
 		if (!fileContents || !content) return;
+		if (query("#toc", content)) return;
 
 		const topLevel = document.createElement("ol");
 		let currentList = topLevel;
@@ -477,7 +479,8 @@
 		}
 	}
 
-	function navExpander() {
+	function navExpander(enabled) {
+		if (enabled === false) return;
 		if (typeof pathId === "undefined") return;
 
 		const frame = document.getElementById("nav");
@@ -500,9 +503,10 @@
 		frame.contentWindow.postMessage({ action: "expand", path: path }, "*");
 	}
 
-	function focusHashTarget() {
-		const hash = window.location.hash;
-		if (!hash) return;
+	function focusHashTarget(hashOverride) {
+		const hash =
+			typeof hashOverride === "string" ? hashOverride : window.location.hash;
+		if (!hash) return false;
 
 		const targetId = hash.slice(1);
 		let decodedTargetId = targetId;
@@ -515,11 +519,16 @@
 			document.getElementById(decodedTargetId) ||
 			document.getElementById(targetId);
 
-		if (target) target.scrollIntoView();
+		if (!target) return false;
+
+		target.scrollIntoView();
+		return true;
 	}
 
 	function mainFocus() {
-		focusHashTarget();
+		if (!focusHashTarget()) {
+			window.scrollTo(window.scrollX, 0);
+		}
 		setTimeout(() => {
 			const main = query("#main");
 			if (main) main.focus();
@@ -529,14 +538,165 @@
 	function navigationChange() {
 		if (appState.navigationChangeBound) return;
 
-		window.onpopstate = focusHashTarget;
+		window.addEventListener("popstate", () => {
+			navigateTo(window.location.href, {
+				pushHistory: false,
+				syncNav: true,
+			});
+		});
 		appState.navigationChangeBound = true;
 	}
 
-	window.__app = () => {
+	function sameDocumentUrl(left, right) {
+		const leftUrl = new URL(left, window.location.href);
+		const rightUrl = new URL(right, window.location.href);
+
+		return (
+			leftUrl.origin === rightUrl.origin &&
+			leftUrl.pathname === rightUrl.pathname &&
+			leftUrl.search === rightUrl.search
+		);
+	}
+
+	function contentPageUrl(url) {
+		const pageUrl = new URL(url, window.location.href);
+
+		pageUrl.hash = "";
+		return pageUrl.href;
+	}
+
+	function updatePageState(doc, pageWindow) {
+		const nextMain = doc.querySelector("#main");
+		const currentMain = query("#main");
+		const currentClassListLink = query("#class_list_link");
+		const currentClassListClassName = currentClassListLink
+			? currentClassListLink.className
+			: null;
+
+		if (!nextMain || !currentMain) return false;
+
+		currentMain.innerHTML = nextMain.innerHTML;
+		document.title = doc.title;
+
+		if (currentClassListClassName && query("#class_list_link")) {
+			query("#class_list_link").className = currentClassListClassName;
+		}
+
+		if (pageWindow && typeof pageWindow.pathId !== "undefined") {
+			pathId = pageWindow.pathId;
+		}
+
+		if (pageWindow && typeof pageWindow.relpath !== "undefined") {
+			relpath = pageWindow.relpath;
+		}
+
+		return true;
+	}
+
+	function pageLoaderFrame() {
+		let frame = query("#page_loader");
+
+		if (frame) return frame;
+
+		frame = document.createElement("iframe");
+		frame.id = "page_loader";
+		frame.setAttribute("aria-hidden", "true");
+		frame.setAttribute("tabindex", "-1");
+		frame.style.display = "none";
+		document.body.appendChild(frame);
+		return frame;
+	}
+
+	function completeNavigation(url, options, pageWindow, pageDocument) {
+		const targetUrl = new URL(url, window.location.href);
+
+		if (!updatePageState(pageDocument, pageWindow)) return false;
+
+		window.__app({ rehydrateNav: false });
+
+		if (options.syncNav && typeof pathId !== "undefined") {
+			expandNavPath(pathId);
+		}
+
+		if (targetUrl.hash) {
+			focusHashTarget(targetUrl.hash);
+		} else {
+			window.scrollTo(window.scrollX, 0);
+		}
+
+		if (options.pushHistory) {
+			history.pushState({}, document.title, targetUrl.href);
+		}
+		appState.currentUrl = targetUrl.href;
+
+		return true;
+	}
+
+	function navigateTo(url, options) {
+		const navigationOptions = Object.assign(
+			{ pushHistory: true, syncNav: false },
+			options || {},
+		);
+		const navigationId = ++appState.latestNavigationId;
+		const loader = pageLoaderFrame();
+		const resolvedUrl = new URL(url, window.location.href).href;
+		const loaderUrl = contentPageUrl(resolvedUrl);
+
+		if (sameDocumentUrl(appState.currentUrl, resolvedUrl)) {
+			const resolvedTargetUrl = new URL(resolvedUrl);
+
+			if (navigationOptions.pushHistory) {
+				history.pushState({}, document.title, resolvedUrl);
+			}
+			appState.currentUrl = resolvedUrl;
+			if (resolvedTargetUrl.hash) {
+				focusHashTarget(resolvedTargetUrl.hash);
+			} else {
+				window.scrollTo(window.scrollX, 0);
+			}
+			return;
+		}
+
+		scheduleMainLoading(navigationId);
+
+		loader.onload = () => {
+			let pageWindow;
+			let pageDocument;
+			let completed = false;
+
+			if (navigationId !== appState.latestNavigationId) return;
+
+			try {
+				pageWindow = loader.contentWindow;
+				pageDocument = loader.contentDocument || pageWindow.document;
+				completed = completeNavigation(
+					resolvedUrl,
+					navigationOptions,
+					pageWindow,
+					pageDocument,
+				);
+			} catch (_error) {
+				window.location.href = resolvedUrl;
+				return;
+			} finally {
+				if (navigationId === appState.latestNavigationId) {
+					cancelMainLoading();
+				}
+				if (completed) {
+					loader.onload = null;
+					loader.removeAttribute("src");
+				}
+			}
+		};
+
+		loader.src = loaderUrl;
+	}
+
+	window.__app = (options) => {
+		const appOptions = options || {};
 		ready(() => {
 			navResizer();
-			navExpander();
+			navExpander(appOptions.rehydrateNav !== false);
 			createSourceLinks();
 			createDefineLinks();
 			createFullTreeLinks();
@@ -555,82 +715,13 @@
 	if (!appState.navigationListenerBound) {
 		window.addEventListener(
 			"message",
-			async (event) => {
-				let navigationId;
-				let response;
-				let text;
-				let parser;
-				let doc;
-				let classListLink;
-				let contentNode;
-				let content;
-				let url;
-				let hash;
-
+			(event) => {
 				if (!event.data || event.data.action !== "navigate") return;
 
-				navigationId = ++appState.latestNavigationId;
-				expandNavPath(event.data.path);
-				scheduleMainLoading(navigationId);
-
-				try {
-					response = await fetch(event.data.url);
-					if (navigationId !== appState.latestNavigationId) return;
-
-					text = await response.text();
-					if (navigationId !== appState.latestNavigationId) return;
-
-					parser = new DOMParser();
-					doc = parser.parseFromString(text, "text/html");
-					classListLink = document.getElementById("class_list_link");
-					contentNode = doc.querySelector("#main");
-					if (!contentNode) return;
-					content = contentNode.innerHTML;
-
-					document.querySelector("#main").innerHTML = content;
-					document.title = doc.head.querySelector("title").innerText;
-
-					queryAll("script", document.head).forEach((script) => {
-						if (
-							!script.type ||
-							(script.type.indexOf("text/javascript") !== -1 && !script.src)
-						) {
-							script.remove();
-						}
-					});
-
-					queryAll("script", doc.head).forEach((script) => {
-						if (
-							!script.type ||
-							(script.type.indexOf("text/javascript") !== -1 && !script.src)
-						) {
-							const newScript = document.createElement("script");
-							newScript.type = "text/javascript";
-							newScript.textContent = script.textContent;
-							document.head.appendChild(newScript);
-						}
-					});
-
-					window.__app();
-					if (navigationId !== appState.latestNavigationId) return;
-
-					if (classListLink && document.getElementById("class_list_link")) {
-						document.getElementById("class_list_link").className =
-							classListLink.className;
-					}
-
-					url = new URL(event.data.url, "http://localhost");
-					hash = decodeURIComponent(url.hash || "");
-					if (hash) {
-						const target = document.getElementById(hash.substring(1));
-						if (target) target.scrollIntoView();
-					}
-					history.pushState({}, document.title, event.data.url);
-				} finally {
-					if (navigationId === appState.latestNavigationId) {
-						cancelMainLoading();
-					}
-				}
+				navigateTo(event.data.url, {
+					pushHistory: true,
+					syncNav: false,
+				});
 			},
 			false,
 		);

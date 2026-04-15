@@ -70,7 +70,6 @@
 
 			itemRow.addEventListener("click", (event) => {
 				let targetLink;
-				let mouseEvent;
 				let url;
 
 				if (
@@ -87,47 +86,20 @@
 				setClicked(item);
 				event.stopPropagation();
 				targetLink = event.target.closest("a");
-
-				if (window.origin === "null") {
-					if (targetLink) return true;
-
+				if (!targetLink?.matches(".object_link a")) {
 					targetLink = item.querySelector(":scope > .item .object_link a");
-					if (!targetLink) return false;
-					mouseEvent = new MouseEvent("click", {
-						bubbles: true,
-						cancelable: true,
-						view: event.view || window,
-						detail: event.detail,
-						screenX: event.screenX,
-						screenY: event.screenY,
-						clientX: event.clientX,
-						clientY: event.clientY,
-						ctrlKey: event.ctrlKey,
-						shiftKey: event.shiftKey,
-						altKey: event.altKey,
-						metaKey: event.metaKey,
-						button: event.button,
-						buttons: event.buttons,
-						relatedTarget: event.relatedTarget,
-					});
-					targetLink.dispatchEvent(mouseEvent);
-					event.preventDefault();
-				} else {
-					if (!targetLink?.matches(".object_link a")) {
-						targetLink = item.querySelector(":scope > .item .object_link a");
-					}
-					if (!targetLink) return false;
-
-					event.preventDefault();
-					url = targetLink.getAttribute("href");
-					try {
-						url = new URL(url, window.location.href).href;
-					} catch (_error) {}
-					window.top.postMessage(
-						{ action: "navigate", url: url, path: pathForItem(item) },
-						"*",
-					);
 				}
+				if (!targetLink) return false;
+
+				event.preventDefault();
+				url = targetLink.getAttribute("href");
+				try {
+					url = new URL(url, window.location.href).href;
+				} catch (_error) {}
+				window.top.postMessage(
+					{ action: "navigate", url: url, path: pathForItem(item) },
+					"*",
+				);
 				return false;
 			});
 		});
