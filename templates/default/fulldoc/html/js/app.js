@@ -527,7 +527,7 @@
 
 	function mainFocus() {
 		if (!focusHashTarget()) {
-			window.scrollTo(window.scrollX, 0);
+			window.scrollTo(0, 0);
 		}
 		setTimeout(() => {
 			const main = query("#main");
@@ -621,7 +621,7 @@
 		if (targetUrl.hash) {
 			focusHashTarget(targetUrl.hash);
 		} else {
-			window.scrollTo(window.scrollX, 0);
+			window.scrollTo(0, 0);
 		}
 
 		if (options.pushHistory) {
@@ -652,7 +652,7 @@
 			if (resolvedTargetUrl.hash) {
 				focusHashTarget(resolvedTargetUrl.hash);
 			} else {
-				window.scrollTo(window.scrollX, 0);
+				window.scrollTo(0, 0);
 			}
 			return;
 		}
