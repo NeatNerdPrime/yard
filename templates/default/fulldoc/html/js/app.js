@@ -525,9 +525,19 @@
 		return true;
 	}
 
+	function resetMainScroll() {
+		const main = query("#main");
+
+		if (main) {
+			main.scrollTop = 0;
+			main.scrollLeft = 0;
+		}
+		window.scrollTo(0, 0);
+	}
+
 	function mainFocus() {
 		if (!focusHashTarget()) {
-			window.scrollTo(0, 0);
+			resetMainScroll();
 		}
 		setTimeout(() => {
 			const main = query("#main");
@@ -621,7 +631,7 @@
 		if (targetUrl.hash) {
 			focusHashTarget(targetUrl.hash);
 		} else {
-			window.scrollTo(0, 0);
+			resetMainScroll();
 		}
 
 		if (options.pushHistory) {
@@ -652,7 +662,7 @@
 			if (resolvedTargetUrl.hash) {
 				focusHashTarget(resolvedTargetUrl.hash);
 			} else {
-				window.scrollTo(0, 0);
+				resetMainScroll();
 			}
 			return;
 		}
