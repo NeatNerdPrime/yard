@@ -6,6 +6,8 @@
 		searchFrameGlobalsBound: false,
 		latestNavigationId: 0,
 		loadingIndicatorTimer: null,
+		loadingProgressTimer: null,
+		loadingProgressHideTimer: null,
 		navExpanderTimer: null,
 		navExpanderToken: 0,
 		currentUrl: window.location.href,
@@ -43,26 +45,84 @@
 	}
 
 	function setMainLoading(loading) {
+		const body = document.body;
 		const main = query("#main");
+
+		if (body) body.classList.toggle("loading", !!loading);
 		if (!main) return;
 		main.classList.toggle("loading", !!loading);
 		main.setAttribute("aria-busy", loading ? "true" : "false");
 	}
 
+	function setLoadingProgress(progress) {
+		const indicator = query("#main_progress");
+
+		if (!indicator) return;
+		indicator.style.setProperty(
+			"--yard-progress",
+			`${Math.max(0, Math.min(100, progress))}%`,
+		);
+	}
+
+	function clearLoadingProgressTimers() {
+		clearTimeout(appState.loadingProgressTimer);
+		clearTimeout(appState.loadingProgressHideTimer);
+		appState.loadingProgressTimer = null;
+		appState.loadingProgressHideTimer = null;
+	}
+
+	function startLoadingProgress() {
+		const startedAt = Date.now();
+
+		clearLoadingProgressTimers();
+		setLoadingProgress(0);
+		setMainLoading(true);
+
+		function tick() {
+			const elapsed = Date.now() - startedAt;
+			let progress;
+
+			if (elapsed <= 1000) {
+				progress = (elapsed / 1000) * 99;
+			} else {
+				progress = 99 + Math.min(1, (elapsed - 1000) / 10000);
+			}
+
+			setLoadingProgress(progress);
+
+			if (progress < 100) {
+				appState.loadingProgressTimer = setTimeout(tick, 50);
+			} else {
+				appState.loadingProgressTimer = null;
+			}
+		}
+
+		tick();
+	}
+
 	function scheduleMainLoading(navigationId) {
 		clearTimeout(appState.loadingIndicatorTimer);
+		clearTimeout(appState.loadingProgressHideTimer);
+		appState.loadingProgressHideTimer = null;
 		appState.loadingIndicatorTimer = setTimeout(() => {
 			if (navigationId === appState.latestNavigationId) {
-				setMainLoading(true);
+				startLoadingProgress();
 			}
 			appState.loadingIndicatorTimer = null;
-		}, 50);
+		}, 400);
 	}
 
 	function cancelMainLoading() {
 		clearTimeout(appState.loadingIndicatorTimer);
 		appState.loadingIndicatorTimer = null;
-		setMainLoading(false);
+		clearTimeout(appState.loadingProgressTimer);
+		appState.loadingProgressTimer = null;
+		setLoadingProgress(100);
+		appState.loadingProgressHideTimer = setTimeout(() => {
+			setMainLoading(false);
+			setLoadingProgress(0);
+			appState.loadingProgressHideTimer = null;
+		}, 120);
 	}
 
 	function firstNextMatchingSibling(element, selector) {

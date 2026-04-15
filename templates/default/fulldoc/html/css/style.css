@@ -47,38 +47,41 @@ body {
 	box-sizing: border-box;
 }
 #main_progress {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 3px;
 	overflow: hidden;
 	opacity: 0;
-	z-index: 20;
+	z-index: 10001;
 	pointer-events: none;
 	transition: opacity 0.18s ease;
 }
 #main_progress::before {
 	content: "";
 	display: block;
-	width: 35%;
+	width: var(--yard-progress, 0%);
 	height: 100%;
 	background: linear-gradient(90deg, #1b6ac9 0%, #4ea3ff 100%);
-	transform: translateX(-120%);
+	transition: width 0.08s linear;
 }
-#main.loading #main_progress {
+body.loading #main_progress {
 	opacity: 1;
 }
-#main.loading #main_progress::before {
-	animation: yard-progress-slide 1s ease-in-out infinite;
+body.loading #main_progress::before {
+	animation: yard-progress-breathe 1.6s ease-in-out infinite;
 }
 
-@keyframes yard-progress-slide {
+@keyframes yard-progress-breathe {
 	0% {
-		transform: translateX(-120%);
+		filter: saturate(0.92) brightness(0.94);
+	}
+	50% {
+		filter: saturate(1.08) brightness(1.08);
 	}
 	100% {
-		transform: translateX(320%);
+		filter: saturate(0.92) brightness(0.94);
 	}
 }
 
