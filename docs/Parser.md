@@ -55,20 +55,6 @@ You can also provide the parser type explicitly as the second argument:
 Note that these two methods are aliased as {YARD.parse} and {YARD.parse_string} for
 convenience.
 
-## Implementing and Registering a Custom Parser
-
-To implement a custom parser, subclass {YARD::Parser::Base}. Documentation on which
-abstract methods should be implemented are documented in that class. After the class
-is implemented, it is registered with the {YARD::Parser::SourceParser} factory class
-to be called when a file of the right extension needs to be parsed, or when a user
-selects that parser type explicitly. To register your new parser class, call the
-method {YARD::Parser::SourceParser.register_parser_type}:
-
-    SourceParser.register_parser_type(:my_parser, MyParser, 'my_parser_ext')
-
-The last argument can be a single extension, a list of extensions (Array), a single Regexp, or a
-list of Regexps. Do not include the '.' in the extension.
-
 ## RubyParser
 
 The Ruby parser uses the Ripper library that is packaged as part of stdlib.
@@ -137,6 +123,20 @@ to quickly get at a node of a specific type in such a situation:
 
 Multiple types can be searched for at once. If none are found, the original root
 node is returned so that it may be chained.
+
+## Implementing and Registering a Custom Parser
+
+To implement a custom parser, subclass {YARD::Parser::Base}. Documentation on which
+abstract methods should be implemented are documented in that class. After the class
+is implemented, it is registered with the {YARD::Parser::SourceParser} factory class
+to be called when a file of the right extension needs to be parsed, or when a user
+selects that parser type explicitly. To register your new parser class, call the
+method {YARD::Parser::SourceParser.register_parser_type}:
+
+    SourceParser.register_parser_type(:my_parser, MyParser, 'my_parser_ext')
+
+The last argument can be a single extension, a list of extensions (Array), a single Regexp, or a
+list of Regexps. Do not include the '.' in the extension.
 
 ## The Legacy Parser
 
