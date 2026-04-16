@@ -61,6 +61,7 @@ namespace :release do
         compare_link,
         '',
         entries,
+        '',
         ''
       ].join("\n")
 
