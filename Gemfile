@@ -12,7 +12,7 @@ group :development do
 end
 
 group :asciidoc do
-  gem 'logger'
+  gem 'logger' if RUBY_VERSION >= '2.3.0'
   gem 'asciidoctor'
 end
 
