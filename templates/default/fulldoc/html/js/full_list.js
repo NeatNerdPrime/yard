@@ -3,9 +3,6 @@
 	let searchTimeout = null;
 	const searchCache = [];
 	let caseSensitiveMatch = false;
-	const ignoreKeyCodeMin = 8;
-	const ignoreKeyCodeMax = 46;
-	const commandKey = 91;
 
 	function query(selector, root) {
 		return (root || document).querySelector(selector);
@@ -151,25 +148,20 @@
 
 		if (!input || !fullList) return;
 
-		input.addEventListener("keyup", (event) => {
-			if (ignoredKeyPress(event)) return;
+		function updateSearchResults() {
 			if (input.value === "") {
 				clearSearch();
 			} else {
 				performSearch(input.value);
 			}
-		});
+		}
+
+		input.addEventListener("input", updateSearchResults);
+		input.addEventListener("change", updateSearchResults);
 
 		fullList.insertAdjacentHTML(
 			"afterend",
 			"<div id='noresults' role='status' style='display: none'></div>",
-		);
-	}
-
-	function ignoredKeyPress(event) {
-		return (
-			(event.keyCode > ignoreKeyCodeMin && event.keyCode < ignoreKeyCodeMax) ||
-			event.keyCode === commandKey
 		);
 	}
 
