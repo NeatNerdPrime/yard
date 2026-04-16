@@ -12,6 +12,7 @@ group :development do
 end
 
 group :asciidoc do
+  gem 'logger'
   gem 'asciidoctor'
 end
 
