@@ -1,5 +1,9 @@
 # main
 
+# [0.9.42] - April 16th, 2026
+
+[0.9.42]: https://github.com/lsegal/yard/compare/v0.9.41...v0.9.42
+
 - Fix alternating rows when loading a module in default HTML templates with subelements in the nav frame
 - Fix reliability of keypresses and copy/paste in search box (#1174)
 - Fix regression in `yard server` search box styling
