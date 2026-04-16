@@ -3,6 +3,7 @@
 - Fix alternating rows when loading a module in default HTML templates with subelements in the nav frame
 - Fix reliability of keypresses and copy/paste in search box (#1174)
 - Fix regression in `yard server` search box styling
+- Fix possible path traversal with document_root (`--docroot`) set in `yard server` ([GHSA-xfhh-rx56-rxcr](https://github.com/lsegal/yard/security/advisories/GHSA-xfhh-rx56-rxcr))
 
 # [0.9.41] - April 14th, 2026
 
@@ -11,6 +12,7 @@
 - Add support for `rdoc-image:...` syntax in HybridMarkup (#1676)
 - Add support for colon suffix code blocks in HybridMarkup (rdoc compatibility)
 - Fix responsiveness and state issues with nav frame links in `yard server`
+
 # [0.9.40] - April 12th, 2026
 
 [0.9.40]: https://github.com/lsegal/yard/compare/v0.9.39...v0.9.40
