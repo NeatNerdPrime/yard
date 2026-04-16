@@ -1,6 +1,7 @@
 # main
 
 - Fix alternating rows when loading a module in default HTML templates with subelements in the nav frame
+- Fix reliability of keypresses and copy/paste in search box (#1174)
 
 # [0.9.41] - April 14th, 2026
 
