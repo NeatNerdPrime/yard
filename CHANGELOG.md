@@ -1,5 +1,7 @@
 # main
 
+- Fix attribute registration in .rbs files (#1583)
+
 # [0.9.42] - April 16th, 2026
 
 [0.9.42]: https://github.com/lsegal/yard/compare/v0.9.41...v0.9.42
